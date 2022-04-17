@@ -1,0 +1,896 @@
+
+gossamer3 login -a MFA --role=arn:aws:iam::541574621075:role/hc-servicesuite-user -p MFA
+
+sed -i '1,8d' C:/Users/212775644/.aws/credentials
+sleep 5
+sed -i 's/MFA/default/g' C:/Users/212775644/.aws/credentials
+
+aws s3 cp --recursive s3://odp-us-innovation-servicesuite/common/ddl_creation/ C:/Users/212775644/Desktop/JSON
+
+aws s3 cp --recursive s3://odp-us-innovation-servicesuite/common/compaction_ddl/ C:/Users/212775644/Desktop/AWS_COPY
+
+sum (amount) over ( partition by customer_id order by date aesc rows between unbounded preceeding and current row) as running_amount
+
+
+C:/Users/212775644/Desktop/AWS_COPY
+*************************************************************************************************************************************
+
+netsh wlan export profile folfer C:\ key= clear
+
+from collections import Counter
+Counter(df.columns)
+
+import urllib3
+urllib3.disable_warnings(urllib3.exceptions.InsecureRequestWarning)
+
+value = data.select("src_nam").limit(1).rdd.map(lambda a:a[0]).collect()
+
+ssh -i C:/Users/212775644/.ssh/id_dev.pem glue@10.242.112.139 -t gluepyspark3
+aws s3 ls --no-verify-ssl
+
+
+us-innovation-redshift.c8ziwm1qxh67.us-east-1.redshift.amazonaws.com:5439
+
+
+# get dataframe schema
+my_schema = list(df.schema)
+
+null_cols = []
+
+# iterate over schema list to filter for NullType columns
+for st in my_schema:
+    if str(st.dataType) == 'NullType':
+        null_cols.append(st)
+
+# cast null type columns to string (or whatever you'd like)
+for ncol in null_cols:
+    mycolname = str(ncol.name)
+    df = df \
+    .withColumn(mycolname, df[mycolname].cast('string'))
+
+reportPath = 'csv_path'+'tgtTable'+"_"+timestmp.strftime("Report_%Y%m%d%H%M%S")+'.txt'
+
+
+
+raw bucket -->      odp-us-innovation-ent-raw
+mirror path -->     odp-us-innovation-ent-raw  / mirror --> compacted data
+
+Manifest Files path --> Amazon S3/odp-us-innovation-servicesuite/common/compaction_manifest
+Private folder ---> Amazon S3/odp-us-innovation-servicesuite/212775644
+
+Crwler -- crw_lnd_s3_<source> --> Database	db_lnd_bfe
+
+
+Identify the table,whther it belongs to mirror or entity
+entity -- dependent on other track
+mirror -- raw data available or not -- run compaction
+<database>.<table_name>_stg --> copied data from compactted mirror
+copied with varchar a default for all columns
+bfe.
+opval shouldnt present in compaction , delete_flg should come
+stl_load_errors
+
+************************************************************************************************************
+git remote add upstream git@github.build.ge.com:DnA-ODP/ODP_Product.git
+git pull upstream ODP_DEV
+git push origin ODP_DEV
+
+************************************************************************************************************
+jady lui aws certification
+FAQs
+ssh -i C:/Users/212775644/.ssh/id_dev.pem glue@10.242.112.139 -t gluepyspark3
+aws s3 ls --no-verify-ssl
+
+python C:\Drivers\keymaker.py
+
+from collections import Counter
+Counter(df.columns)
+import urllib3
+urllib3.disable_warnings(urllib3.exceptions.InsecureRequestWarning)
+
+*************************************************************************************************************
+import org.apache.spark.sql.types.{StructType, StructField, StringType};
+val schemaString = "gib04000_del_ins filler1 gib04001_usn gib04002_nme gib04003_dte_est gib04004_typ_cde gib04005_dfsf_cde gib04006_psi_cde gib04007_dte_first gib04008_chk_dte gib04009_rev_lvl gib04010_last_sseq gib04011_last_cseq gib04012_last_pseq gib04013_ma_cde gib04014_mbl_sw gib04015_lship_dte gib04016_nge_eqp gib04017_prd_add gib04018_prd_dinst gib04019_lst_mln"
+val schema = StructType(schemaString.split(" ").map(fieldName ⇒ StructField(fieldName, StringType, true)))
+val df1 = spark.read.schema(schema).option("header","true").option("delimiter","~").csv(file1)
+
+
+*************************************************************************************************************
+
+Copy glprod.mtl_material_transactions_full_stg
+from 's3://odp-us-prod-ent-raw/mirror/glprod/mtl_material_transactions_full/batch=39/'
+credentials 'aws_iam_role=arn:aws:iam::245792935030:role/ODP-US-Prod-AWSServiceRole'
+FORMAT AS PARQUET;
+
+****************************************************************************************************************
+quoteChar to '-1'
+
+********************
+
+validates data formatting and data integrety in spark jobs
+
+*******************************************************************************************************************************
+
+
+aws s3 cp s3://aws-tc-largeobjects/AWS-200-BIG/v3.1/lab-6-spark/scripts/jar/ . --recursive
+
+spark-shell --jars minimal-json-0.9.5-SNAPSHOT.jar,/usr/share/aws/redshift/jdbc/RedshiftJDBC.jar,spark-avro_2.11-3.0.1.jar,spark-redshift_2.11-2.0.1.jar
+
+import org.apache.spark.sql._
+import com.amazonaws.auth._
+val provider = new InstanceProfileCredentialsProvider()
+val credentials: AWSSessionCredentials = provider.getCredentials.asInstanceOf[AWSSessionCredentials]
+val token = credentials.getSessionToken
+val awsAccessKey = credentials.getAWSAccessKeyId
+val awsSecretKey = credentials.getAWSSecretKey
+val s3_location = "s3://aws-tc-largeobjects/AWS-200-BIG/v3.1/lab-6-spark/processed_data.csv"
+val df = spark.read.option("header","true").option("inferSchema","true").csv(s3_location)
+
+df.printSchema()
+df.filter(df("tip_amount") > 0).groupBy("passenger_count").agg(mean("tip_amount")).sort("passenger_count").show()
++---------------+------------------+
+|passenger_count|   avg(tip_amount)|
++---------------+------------------+
+|              0|2.8511904761904763|
+|              1| 2.825620081748727|
+|              2| 2.988232215806794|
+|              3| 2.881711567213959|
+|              4|2.9302700175621172|
+|              5| 2.937183912917785|
+|              6|2.8746687358430045|
+|              7| 6.227142857142857|
+|              8|17.373333333333335|
+|              9|           11.5575|
++---------------+------------------+
+
+df.groupBy("passenger_count").count().sort("passenger_count").show()
++---------------+-------+
+|passenger_count|  count|
++---------------+-------+
+|              0|   1252|
+|              1|8487782|
+|              2|1712138|
+|              3| 513124|
+|              4| 243183|
+|              5| 665464|
+|              6| 426268|
+|              7|     14|
+|              8|      5|
+|              9|     13|
++---------------+-------+
+
+
+val jdbc_url ="jdbc:redshift://qls-3671568-5668bd6df4f1482e-redshiftcluster-1lz29saur7jg4.cmbokssfi7da.us-west-2.redshift.amazonaws.com:5439/dev"+"?user=admin&password=Red$hift123"
+
+df.write.format("com.databricks.spark.redshift").option("url", jdbc_url).option("dbtable","nytaxi").option("tempdir",temp_dir)
+.option("temporary_aws_access_key_id", awsAccessKey).option("temporary_aws_secret_access_key", awsSecretKey).option("temporary_aws_session_token",token).save()
+
+
+Here are 20 questions you can ask during your performance review:
+
+Is there room for growth within our department?
+What goals should I work toward?
+How can I help our team succeed?
+What would make me a candidate for a promotion?
+Am I meeting your expectations?
+How are you measuring my progress?
+What skills should I improve to grow in this company?
+Are there any opportunities for professional development?
+Can we discuss my compensation?
+What are my strengths?
+What are my weaknesses?
+How can I support my team better?
+What can I do to make your job easier?
+What changes do you foresee for the company?
+What is our company's greatest challenge right now?
+What goals are you working toward?
+How do you hope to grow with the company?
+What were your biggest successes this past year?
+What am I focusing too much of my time on?
+What could I focus more time on?
+
+
+
+
+AUTOMATE COMPACTION DETAILS :
+GLUE JOB --> compaction_dev_automation
+COMPLETE PATH --> s3://odp-us-innovation-servicesuite/common/compaction_pipeline/pand1.csv
+s3://odp-us-innovation-servicesuite/common/ddl_creation/
+
+    Job Type Incremental  :
+    1) Reading the latest day partition data from s3 raw using glue job bookmarking. Considering rownumber 1 records using natural key and sort key  (Consider this as INCREMENTAL_DF_RANKD_1, which holds distinct & latest sortkey timestamp records )
+    2) Reading previous batch from s3 mirror. (Consider this as COMPACT_LAYER_DATA_DF)
+    3) Filtering the records which are not present in INCREMENTAL_DF_RANKD_1 and present in COMPACT_LAYER_DATA_DF  (using left anti join). -- unaffected records/ not change detected in incoming data
+    Consider this as COMPACT_RECORDS_LEFT_ANTI )
+    4)Populating the deleted_flag column values based on INCREMENTAL_DF_RANKD_1.op_val == 0 (Consider this as INCREMENTAL_DF_DEL )
+    5) Writing the data to new batch s3 mirror by doing UnionAll between INCREMENTAL_DF_DEL and COMPACT_RECORDS_LEFT_ANTI.
+
+
+    ##Hist_reload as Y reads all partitions from raw and processes to s3 mirror.
+
+
+    Note : when a column is added in manifest for incremental type , code automatically goes into history reload mode
+    ===========================================================================================================================================
+    Job Type Full refresh  :
+    1)Reading the latest day partition data from s3 raw using glue job bookmarking. (Consider this as INTERVAL_DF, if multiple loads(intraday- full refresh) are in raw then job reads latest load partition )
+    2)Reading previous batch from s3 mirror. (Consider this as COMPACT_LAYER_DATA)
+    3)Identifying the deleted records which are not present in INTERVAL_DF and present in COMPACT_LAYER_DATA  (using left anti join and populating the deleted_flag column values )
+    Consider this as INTERVAL_DF_deleted, which holds deleted records
+    4) Writing the data to new batch s3 mirror by doing UnionAll between INTERVAL_DF and INTERVAL_DF_deleted.
+
+
+    ##Hist_reload as Y reads only latest raw partition data instead of reading all partitions , since it is full refresh.
+    In this case previously deleted flag Y records will be missed.
+    For full refresh intraday loads like Mapp, only latest day/load partitions records will be processed by glue job using max of day/load.
+
+    ************************************************************************************************************************************************
+
+Project explaination and project data ??
+
+SQL, : Window functions , group by , having, joins, subqueries (in & exist), duplicates, pivot, transpose, lead, lag, first value, last value, case statements,
+        rank, dense_rank, row_number, null safe equal operator
+Spark : basics, reading files, performance tuning , joins, Transformation,
+
+AWS, : S3 , glue, redshift, sns, lambda, sf
+Sorting : data structures algorithm
+Python : List , dictionaries
+
+
+**********************************************************************************************************************************************************************************************
+python :
+
+1. two list, there are duplicates
+
+list_a = [1,2,3,4,1,2,3,4,5,6,7,2,3,4,]
+list_b = [5,6,7,5,2,7,3,46,7,34,6]
+
+---> list(set(list_a + list_b))
+
+2. list and tuple difference -- list is mutable, but tuples are immutable
+
+3. list vs dictionary -- which one to use and when ?
+
+4. Python pandas df v Spark df
+    mutable | immutable
+    not distributed | distributed
+    not lazy evaluated | lazy evaluated
+
+5. How to sort a list without using sort Method
+
+def my_sort(lst):
+    a = []
+    for i in range(len(lst)):
+        a.append(min(lst))
+        lst.remove(min(lst))
+    return a
+
+AWS :
+s3 --
+standard sotrage types, encryption types,  lifecycle management, how different is s3  compared to hdfs, s3 versioning, partitioning
+glue ---
+GLue vs EMR,which one to use when,  glue data catalogue, crawler, job bookmarking, job types in glue, DPUs, workr types, CDC logic, dynamicframe vs dataframe,
+what tranformation we have used -- withColumn, coalesce, repartition, union, filter, join
+wide vs narrow transformation, coalesce vs repartition, union vs unionall, unionbyName -- allow missing column = true,  null safe equal operator
+Redshift --
+cluster size, number of nodes, types, cluster types, ra3.16xlarge | 4 nodes | 512 TB, performance optimisation , dist key, sort key, encryption, typer of these keys
+redshift copy command sample
+
+redshift admin takes care of access
+
+Spark --
+difference in RDD, Dataframe and Dataset , when will you go for rdd, what is lazy evaluation, performance and tuning, broadcast variable, basic spark submit command, client mode and cluster mode,
+--master YARN, Kubernates, Apache Mesos, why spark doesn't do data replication ?
+
+address column having data seperated with comma
+house_number, street_name, PIN
+
+.withColumn("house",split(df.address, ",")).getitem(0)
+
+Split firtname and lastname into different columns
+Name
+Priyanku Chopra
+
+.withColumn("First_Name",split(df.Name, " ")).getitem(0)
+
+what is the difference between distinct and drop duplicates
+
+
+
+
+
+validate_mail inbuilt library in spark to valdate email address
+
+
+A Column having below, extraxt only the numbers from data
+360lbs
+273kgs
+
+regular expression extract
+
+Address column having full address
+lane
+
+in the data "lane" keyword to be replaced with "ln"
+
+regular expression with replace
+
+
+unionbyName Example --
+
+df1 = spark.createDataFrame([[1, 2, 3]], ["col0", "col1", "col2"])
+df2 = spark.createDataFrame([[4, 5, 6]], ["col1", "col2", "col3"])
+df1.unionByName(df2, allowMissingColumns=True).show()
+
+
+
+SQL ---
+
+Joins, and their outputs
+
+Table A, Table B
+1        1
+1        1
+1        2
+2        2
+3        4
+
+Numer of records
+Inner Join
+8
+
+Left Join
+9
+
+Right Join
+9
+
+Full Outer
+10
+
+
+EMP_ID, EMP_NAME, MNGR_ID, MNGR_NAME
+
+Find EMP_ID who are managers ?
+
+
+select A.EMP_ID FROM emp A, emp B
+where A.EMP_ID = B.MNGR_ID
+
+
+rank, dense_rank, ROW_NUMBER
+
+running total , cummulative sum
+
+Retail Business
+
+CUST_ID, DATE, PROD, COST
+1,1-Jan, Mobile, 100
+2,1-Jan, Fridge, 300
+3,1-Jan, Mat, 50
+1,30-Jan,Macbook, 500
+3,1-Feb, Pen, 10
+3,15-Feb, Macbook, 450
+
+Running total entirely
+select date, sum(COST) over (order by date asc rows between unbounder preeceding and current row ) as running_total_cost from table;
+
+running total for each cust id
+select CUST_ID, sum(COST) over(partiton by CUST_ID order by date asc rows between unbounded preeceeding and current row) as running_total_cost from table;
+
+For each customer, how much businees happened
+-- select CUST_ID, sum(COST) over(partiton by CUST_ID order by date asc ) as running_total_cost from table;
+
+
+DEPT,DATE,SALES
+IT,1-JAN-2019,1M
+HR,1-MAR-2019,1.2M
+DNA,1-DEC-2019,4M
+IT,1-APR-2020,2M
+DNA,1-AUG-2020,4.5M
+IT,1-MAR-2021,2.5M
+HR,1-MAY-2021,3M
+
+
+How much each dept made in the year of 2020, and 2021
+
+
+select DEPT, YEAR(date), sum(SALES) over(partiton by DEPT ) as TOTL_SALE from
+(
+select * from table where year in (2020,2021);
+);
+
+select sum(sales), dept, year from customers groupby dept, year having year in (2020,2021);
+
+2M,IT,2020
+4.5M,DNA,2020
+null,HR,2020
+2.5M,IT,2021
+3M,HR,2021
+null,DNA,2021
+
+
+DEPT,2020,2021
+IT,2M,2.5M
+HR,null,3M
+DNA,4.5,null
+
+-- PIVOT
+
+select * from
+(
+select dept, sales, year(to_date(date, 'dd-MM-yyyy')) yr from TABLE
+where year(to_date(date, 'dd-MM-yyyy')) in ('2020','2021')
+)src
+pivot
+(sum(sales) for yr in ('2020','2021')
+);
+
+
+select sum(sales), dept from customers groupby dept having year in (2020,2021);
+
+
+
+Id Customer_name Product
+1   Raj       Ipod
+2   Raj       Mac
+1   Suresh    Ipod
+2   Suresh    Iphone
+3   Suresh    Mac
+1   Lalith    Ipod
+2   Lalith    Mac
+
+
+Who bought IPAD first and next Mac ?
+-- query
+select * from
+(select customer_name, product, lead(product,1,'N/A') over (partition by customer_name order by Id asc) as next_product
+from table)
+where product= Ipod and next_product = Mac;
+
+
+
+(select customer_name, product, lead(product,1,'N/A') over (partition by customer_name order by Id asc) as next_product
+from table)
+-- result
+Id Customer_name Product    next_product
+1   Raj       Ipod          Mac
+2   Raj       Mac           N/A
+1   Suresh    Ipod          Iphone
+2   Suresh    Iphone        Mac
+3   Suresh    Mac           N/A
+1   Lalith    Ipod          Mac
+2   Lalith    Mac           N/A
+
+select * from
+(select customer_name, product, lead(product,1,'N/A') over (partition by customer_name order by Id asc) as next_product
+from table)
+where product= Ipod and next_product = Mac;
+--result
+Id Customer_name Product    next_product
+1   Raj       Ipod          Mac
+1   Lalith    Ipod          Mac
+
+
+-- first_value
+
+-- query
+select customer_name, first_value(product) over (partition by customer_name order by Id asc) as first_product from table;
+Id Customer_name Product
+1   Raj       Ipod
+1   Suresh    Ipod
+1   Lalith    Ipod
+
+
+--- case
+
+customer_no transaction_type  amount
+1           Credit         100
+1           Credit         50
+1           Credit         350
+1           Debit          1000
+1           Credit         500
+1           Debit          100
+2           Credit         150
+2           Debit          150
+
+
+
+select customer_no, (credit_amt-debit_amt) as total_balance
+from
+(
+select
+customer_no,
+sum( case when transaction_type = 'debit' then amount else 0 end) as debit_amt,
+sum( case when transaction_type = 'credit' then amount else 0 end) as credit_amt
+from table
+group by customer_no
+) tbl
+
+
+sum of positive number and sum of negative numbers
+
+numbers
+11
+-22
+8
+-30
+5
+-64
+-33
+66
+
+select
+sum(case when numbers>0 then numbers else 0 end) as positive_sum
+sum(case when numbers<0 then numbers else 0 end) as negative_sum
+from table
+
+
+-- when two tables are having in the joining condtion columns , so to avoid cross join, we use null safe equal operator
+
+https://www.tutorialspoint.com/What-is-MySQL-NULL-safe-equal-operator-and-how-it-is-different-from-comparison-operator
+
+
+questions on your current project
+oozie questions for scheduling
+spark submit command - which all parameters you used for performance tuning of job ?
+spark- narrow vs wide transformation, no of jobs , no of stages, no of tasks
+how will you run a process or an application in the background mode ? I think nohup mode
+hive questions
+hadoop questions
+some basic sql questions on joins and filter
+how will you troubleshoot a long running spark job -- you need to check the Spark Web UI and drill down from Job > Stages > Tasks and try and figure out what is causing things to stuck.
+spark - differenc between repartion coalesce
+
+ hadoop fs –copyFromLocal /tmp/data.csv /user/test/data.csv
+
+./bin/spark-submit --master yarn --deploy-mode <deploy-mode> --conf <key<=<value> --driver-memory <value>g --executor-memory <value>g –-driver-cores <> --executor-cores <number of cores>  \
+  --jars  <comma separated dependencies> --class <main-class> <application-jar>
+
+
+  --num-executors , --executor-cores 5 and --executor-memory.. these three params play a very important role in spark performance
+
+  https://stackoverflow.com/questions/37871194/how-to-tune-spark-executor-number-cores-and-executor-memory
+
+Hardware - 6 Nodes, and Each node 16 cores, 64 GB RAM
+  -- Executors - 17, Cores 5, Executor Memory - 19 GB
+
+
+   over head is max(384, .07 * spark.executor.memory)
+
+
+
+
+
+************************************************************************************************************************************************
+
+Project explaination and project data ??
+
+SQL, : Window functions , group by , having, joins, subqueries (in & exist), duplicates, pivot, transpose, lead, lag, first value, last value, case statements,
+    rank, dense_rank, row_number, null safe equal operator
+Spark : basics, reading files, performance tuning , joins, Transformation,
+
+AWS, : S3 , glue, redshift, sns, lambda, sf
+Sorting : data structures algorithm
+Python : List , dictionaries
+
+
+**********************************************************************************************************************************************************************************************
+python :
+
+1. two list, there are duplicates
+
+list_a = [1,2,3,4,1,2,3,4,5,6,7,2,3,4,]
+list_b = [5,6,7,5,2,7,3,46,7,34,6]
+
+---> list(set(list_a + list_b))
+
+2. list and tuple difference -- list is mutable, but tuples are immutable
+
+3. list vs dictionary -- which one to use and when ?
+
+4. Python pandas df v Spark df
+mutable | immutable
+not distributed | distributed
+not lazy evaluated | lazy evaluated
+
+5. How to sort a list without using sort Method
+
+def my_sort(lst):
+a = []
+for i in range(len(lst)):
+    a.append(min(lst))
+    lst.remove(min(lst))
+return a
+
+AWS :
+s3 --
+standard sotrage types, encryption types,  lifecycle management, how different is s3  compared to hdfs, s3 versioning, partitioning
+glue ---
+GLue vs EMR,which one to use when,  glue data catalogue, crawler, job bookmarking, job types in glue, DPUs, workr types, CDC logic, dynamicframe vs dataframe,
+what tranformation we have used -- withColumn, coalesce, repartition, union, filter, join
+wide vs narrow transformation, coalesce vs repartition, union vs unionall, unionbyName -- allow missing column = true,  null safe equal operator
+Redshift --
+cluster size, number of nodes, types, cluster types, ra3.16xlarge | 4 nodes | 512 TB, performance optimisation , dist key, sort key, encryption, typer of these keys
+redshift copy command sample
+
+redshift admin takes care of access
+
+Spark --
+difference in RDD, Dataframe and Dataset , when will you go for rdd, what is lazy evaluation, performance and tuning, broadcast variable, basic spark submit command, client mode and cluster mode,
+--master YARN, Kubernates, Apache Mesos, why spark doesn't do data replication ?
+
+address column having data seperated with comma
+house_number, street_name, PIN
+
+.withColumn("house",split(df.address, ",")).getitem(0)
+
+Split firtname and lastname into different columns
+Name
+Priyanku Chopra
+
+.withColumn("First_Name",split(df.Name, " ")).getitem(0)
+
+what is the difference between distinct and drop duplicates
+
+
+
+
+
+validate_mail inbuilt library in spark to valdate email address
+
+
+A Column having below, extraxt only the numbers from data
+360lbs
+273kgs
+
+regular expression extract
+
+Address column having full address
+lane
+
+in the data "lane" keyword to be replaced with "ln"
+
+regular expression with replace
+
+
+unionbyName Example --
+
+df1 = spark.createDataFrame([[1, 2, 3]], ["col0", "col1", "col2"])
+df2 = spark.createDataFrame([[4, 5, 6]], ["col1", "col2", "col3"])
+df1.unionByName(df2, allowMissingColumns=True).show()
+
+
+
+SQL ---
+
+Joins, and their outputs
+
+Table A, Table B
+1        1
+1        1
+1        2
+2        2
+3        4
+
+Numer of records
+Inner Join
+8
+
+Left Join
+9
+
+Right Join
+9
+
+Full Outer
+10
+
+
+EMP_ID, EMP_NAME, MNGR_ID, MNGR_NAME
+
+Find EMP_ID who are managers ?
+
+
+select A.EMP_ID FROM emp A, emp B
+where A.EMP_ID = B.MNGR_ID
+
+
+rank, dense_rank, ROW_NUMBER
+
+running total , cummulative sum
+
+Retail Business
+
+CUST_ID, DATE, PROD, COST
+1,1-Jan, Mobile, 100
+2,1-Jan, Fridge, 300
+3,1-Jan, Mat, 50
+1,30-Jan,Macbook, 500
+3,1-Feb, Pen, 10
+3,15-Feb, Macbook, 450
+
+Running total entirely
+select date, sum(COST) over (order by date asc rows between unbounder preeceding and current row ) as running_total_cost from table;
+
+running total for each cust id
+select CUST_ID, sum(COST) over(partiton by CUST_ID order by date asc rows between unbounded preeceeding and current row) as running_total_cost from table;
+
+For each customer, how much businees happened
+-- select CUST_ID, sum(COST) over(partiton by CUST_ID order by date asc ) as running_total_cost from table;
+
+
+DEPT,DATE,SALES
+IT,1-JAN-2019,1M
+HR,1-MAR-2019,1.2M
+DNA,1-DEC-2019,4M
+IT,1-APR-2020,2M
+DNA,1-AUG-2020,4.5M
+IT,1-MAR-2021,2.5M
+HR,1-MAY-2021,3M
+
+
+How much each dept made in the year of 2020, and 2021
+
+
+select DEPT, YEAR(date), sum(SALES) over(partiton by DEPT ) as TOTL_SALE from
+(
+select * from table where year in (2020,2021);
+);
+
+select sum(sales), dept, year from customers groupby dept, year having year in (2020,2021);
+
+2M,IT,2020
+4.5M,DNA,2020
+null,HR,2020
+2.5M,IT,2021
+3M,HR,2021
+null,DNA,2021
+
+
+DEPT,2020,2021
+IT,2M,2.5M
+HR,null,3M
+DNA,4.5,null
+
+-- PIVOT
+
+select * from
+(
+select dept, sales, year(to_date(date, 'dd-MM-yyyy')) yr from TABLE
+where year(to_date(date, 'dd-MM-yyyy')) in ('2020','2021')
+)src
+pivot
+(sum(sales) for yr in ('2020','2021')
+);
+
+
+select sum(sales), dept from customers groupby dept having year in (2020,2021);
+
+
+
+Id Customer_name Product
+1   Raj       Ipod
+2   Raj       Mac
+1   Suresh    Ipod
+2   Suresh    Iphone
+3   Suresh    Mac
+1   Lalith    Ipod
+2   Lalith    Mac
+
+
+Who bought IPAD first and next Mac ?
+-- query
+select * from
+(select customer_name, product, lead(product,1,'N/A') over (partition by customer_name order by Id asc) as next_product
+from table)
+where product= Ipod and next_product = Mac;
+
+
+
+(select customer_name, product, lead(product,1,'N/A') over (partition by customer_name order by Id asc) as next_product
+from table)
+-- result
+Id Customer_name Product    next_product
+1   Raj       Ipod          Mac
+2   Raj       Mac           N/A
+1   Suresh    Ipod          Iphone
+2   Suresh    Iphone        Mac
+3   Suresh    Mac           N/A
+1   Lalith    Ipod          Mac
+2   Lalith    Mac           N/A
+
+select * from
+(select customer_name, product, lead(product,1,'N/A') over (partition by customer_name order by Id asc) as next_product
+from table)
+where product= Ipod and next_product = Mac;
+--result
+Id Customer_name Product    next_product
+1   Raj       Ipod          Mac
+1   Lalith    Ipod          Mac
+
+
+-- first_value
+
+-- query
+select customer_name, first_value(product) over (partition by customer_name order by Id asc) as first_product from table;
+Id Customer_name Product
+1   Raj       Ipod
+1   Suresh    Ipod
+1   Lalith    Ipod
+
+
+--- case
+
+customer_no transaction_type  amount
+1           Credit         100
+1           Credit         50
+1           Credit         350
+1           Debit          1000
+1           Credit         500
+1           Debit          100
+2           Credit         150
+2           Debit          150
+
+
+
+select customer_no, (credit_amt-debit_amt) as total_balance
+from
+(
+select
+customer_no,
+sum( case when transaction_type = 'debit' then amount else 0 end) as debit_amt,
+sum( case when transaction_type = 'credit' then amount else 0 end) as credit_amt
+from table
+group by customer_no
+) tbl
+
+
+sum of positive number and sum of negative numbers
+
+numbers
+11
+-22
+8
+-30
+5
+-64
+-33
+66
+
+select
+sum(case when numbers>0 then numbers else 0 end) as positive_sum
+sum(case when numbers<0 then numbers else 0 end) as negative_sum
+from table
+
+
+-- when two tables are having in the joining condtion columns , so to avoid cross join, we use null safe equal operator
+
+https://www.tutorialspoint.com/What-is-MySQL-NULL-safe-equal-operator-and-how-it-is-different-from-comparison-operator
+
+
+questions on your current project
+oozie questions for scheduling
+spark submit command - which all parameters you used for performance tuning of job ?
+spark- narrow vs wide transformation, no of jobs , no of stages, no of tasks
+how will you run a process or an application in the background mode ? I think nohup mode
+hive questions
+hadoop questions
+some basic sql questions on joins and filter
+how will you troubleshoot a long running spark job -- you need to check the Spark Web UI and drill down from Job > Stages > Tasks and try and figure out what is causing things to stuck.
+spark - differenc between repartion coalesce
+
+hadoop fs –copyFromLocal /tmp/data.csv /user/test/data.csv
+
+./bin/spark-submit --master yarn --deploy-mode <deploy-mode> --conf <key<=<value> --driver-memory <value>g --executor-memory <value>g –-driver-cores <> --executor-cores <number of cores>  \
+--jars  <comma separated dependencies> --class <main-class> <application-jar>
+
+
+--num-executors , --executor-cores 5 and --executor-memory.. these three params play a very important role in spark performance
+
+https://stackoverflow.com/questions/37871194/how-to-tune-spark-executor-number-cores-and-executor-memory
+
+Hardware - 6 Nodes, and Each node 16 cores, 64 GB RAM
+-- Executors - 17, Cores 5, Executor Memory - 19 GB
+
+
+over head is max(384, .07 * spark.executor.memory)
